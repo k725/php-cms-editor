@@ -95,7 +95,8 @@ class SQLArticleRepository implements ArticleRepository
                 throw new ArticleNotFoundException();
             }
             $p = $this->findArticlePartsOfId($id);
-            return new Article((int)$r['id'], $r['title'], $r['description'], $r['created_at'], $r['updated_at'], $p);
+            $ref = $this->findReferenceArticles($id);
+            return new Article((int)$r['id'], $r['title'], $r['description'], $r['created_at'], $r['updated_at'], $p, $ref);
         } catch (PDOException $e) {
             $this->logger->error('Failed fetch article.', [
                 'exception' => $e,
@@ -133,7 +134,7 @@ class SQLArticleRepository implements ArticleRepository
         try {
             $stmt = $this->pdo->prepare("
                 SELECT
-                    id, title, created_at
+                    id, title, description
                 FROM
                     article
                 WHERE

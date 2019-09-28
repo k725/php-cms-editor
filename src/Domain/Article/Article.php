@@ -33,19 +33,33 @@ class Article implements JsonSerializable
     private $updatedAt;
 
     /**
+     * @var array
+     */
+    private $parts;
+
+    /**
+     * @var array
+     */
+    private $refs;
+
+    /**
      * Article constructor.
      * @param int $id
      * @param string $title
      * @param string $description
      * @param string $createdAt
      * @param string|null $updatedAt
+     * @param array $parts
+     * @param array $refs
      */
     public function __construct(
         int $id,
         string $title,
         string $description,
         string $createdAt,
-        ?string $updatedAt
+        ?string $updatedAt,
+        array $parts,
+        array $refs
     )
     {
         $this->id = $id;
@@ -53,6 +67,8 @@ class Article implements JsonSerializable
         $this->description = $description;
         $this->createdAt = $createdAt;
         $this->updatedAt = $updatedAt;
+        $this->parts = $parts;
+        $this->refs = $refs;
     }
 
     /**
@@ -95,17 +111,49 @@ class Article implements JsonSerializable
         return $this->updatedAt;
     }
 
+    public function getParts(): array
+    {
+        return $this->parts;
+    }
+
+    public function getRefs(): array
+    {
+        return $this->refs;
+    }
+
+    private function findReferenceArticleOfId(int $id): array
+    {
+        foreach ($this->refs as $r) {
+            if ((int)$r['id'] === $id) {
+                $r['id'] = (int)$r['id'];
+                return $r;
+            }
+        }
+        return [];
+    }
+
     /**
      * @return array
      */
     public function jsonSerialize()
     {
+        $parts = $this->parts;
+        foreach ($parts as $i => $p) {
+            $parts[$i]['article_order'] = (int)$p['article_order'];
+
+            if ($p['name'] !== 'reference') {
+                continue;
+            }
+            $parts[$i]['data'] = $this->findReferenceArticleOfId((int)$p['data']);
+        }
+
         return [
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
             'createdAt' => $this->createdAt,
             'updatedAt' => $this->updatedAt,
+            'parts' => $parts,
         ];
     }
 }
