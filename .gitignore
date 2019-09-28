@@ -97,3 +97,4 @@ modules.xml
 !/cache/Twig/.gitkeep
 /public/static/*
 !/public/static/.gitkeep
+/app/settings.php
