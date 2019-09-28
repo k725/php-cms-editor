@@ -8,11 +8,13 @@
  *   </div>
  * </div>
  *
+ * @param id
  * @param titleValue
  * @param descriptionValue
  * @param linkValue
  */
 export const createReferenceParts = (
+    id: number,
     titleValue: string,
     descriptionValue: string,
     linkValue: string
@@ -35,5 +37,7 @@ export const createReferenceParts = (
     const partsReference = document.createElement('div');
     partsReference.classList.add('row', 'parts-reference');
     partsReference.appendChild(cardPanel);
+    partsReference.dataset.id = id.toString();
+
     return partsReference;
 };

@@ -15,10 +15,26 @@ class EditArticleAction extends ArticleAction
         $articleId = (int) $this->args['id'];
 
         $data = $this->getFormData();
-        if (!isset($data->title, $data->description, $data->parts)) {
-            return $this->response->withStatus(500);
-        }
+        switch ($data->mode)
+        {
+            case "add":
+                $r = $this->articleRepository->addArticleParts($articleId, $data->type, $data->data);
+                return $this->respondWithData([
+                    'id' => $r,
+                ]);
 
+            case "update":
+                // order
+                break;
+
+            case "delete":
+                $this->articleRepository->deleteArticleParts($articleId, $data->id);
+                return $this->respondWithData();
+
+            case "summary":
+                $this->articleRepository->updateArticleSummary($articleId, $data->title, $data->description);
+                return $this->respondWithData();
+        }
 
         $users = $this->articleRepository->findArticleDetailOfId($articleId);
         return $this->respondWithData($users);

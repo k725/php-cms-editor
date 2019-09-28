@@ -139,7 +139,9 @@ class Article implements JsonSerializable
     {
         $parts = $this->parts;
         foreach ($parts as $i => $p) {
-            $parts[$i]['article_order'] = (int)$p['article_order'];
+            // $parts[$i]['articleOrder'] = (int)$p['article_order'];
+            $parts[$i]['partsId'] = (int)$p['parts_id'];
+            unset($parts[$i]['parts_id']);
 
             if ($p['name'] !== 'reference') {
                 continue;

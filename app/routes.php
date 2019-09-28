@@ -5,6 +5,7 @@ use App\Application\Actions\Article\{ViewArticleAPIAction,
     ViewArticlesListAction,
     EditArticleAction,
     ViewArticleAction,
+    ViewArticlesListAPIAction,
     ViewEditArticleAction};
 use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
@@ -16,8 +17,9 @@ return function (App $app) {
         $group->get('/edit', ViewEditArticleAction::class);
     });
 
-    $app->group('/api/articles/{id}', function (Group $group) {
-        $group->get('', ViewArticleAPIAction::class);
-        $group->post('', EditArticleAction::class);
+    $app->group('/api/articles', function (Group $group) {
+        $group->get('', ViewArticlesListAPIAction::class);
+        $group->get('/{id}', ViewArticleAPIAction::class);
+        $group->post('/{id}', EditArticleAction::class);
     });
 };

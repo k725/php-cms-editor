@@ -13,4 +13,10 @@ interface ArticleRepository
     public function findArticleSummaryOfId(int $id): array;
 
     public function findArticleDetailOfId(int $id): Article;
+
+    public function addArticleParts(int $articleId, string $articleType, string $data);
+
+    public function deleteArticleParts(int $articleId, int $partsId);
+
+    public function updateArticleSummary(int $articleId, string $title, string $description);
 }

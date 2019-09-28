@@ -8,14 +8,12 @@ import {setupSummaryEvents} from "./editor/summary/events";
 import 'materialize-css/dist/css/materialize.min.css';
 import './style/main.scss';
 import {buildArticle} from "./editor/getArticle";
+import {buildSummaryList} from "./editor/summary/list";
 
 document.addEventListener('DOMContentLoaded', async () => {
     setupMaterialize();
     setupInsertEditorEvents();
     setupSummaryEvents();
-
-    const selector = '.parts-header, .parts-text, .parts-reference';
-    document.querySelectorAll(selector).forEach(setupPartsEditEvents);
-
     await buildArticle();
+    await buildSummaryList();
 }, false);

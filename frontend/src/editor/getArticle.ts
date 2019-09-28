@@ -17,17 +17,18 @@ export const buildArticle = async () => {
     result.data.parts.forEach((data) => {
         switch (data.name) {
             case "heading":
-                const headElem = createHeadingParts(data.data);
+                const headElem = createHeadingParts(data.partsId, data.data);
                 addParts(headElem);
                 setupPartsEditEvents(headElem);
                 break;
             case "text":
-                const textElem = createTextParts(data.data);
+                const textElem = createTextParts(data.partsId, data.data);
                 addParts(textElem);
                 setupPartsEditEvents(textElem);
                 break;
             case "reference":
                 const refElem = createReferenceParts(
+                    data.partsId,
                     data.data.title,
                     data.data.description,
                     `/articles/${data.data.id}`,
