@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <title>Simple Content Editor</title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+<div class="container">
+    <div class="col s12">
+        <div class="row">
+            <h3>記事編集 (記事ID: <span id="article_id"></span>)</h3>
+            <div class="divider"></div>
+        </div>
+
+        <div class="row">
+            <div class="input-field col s12">
+                <!-- materialize のの表示がおかしくなるのでスペース -->
+                <input id="title" type="text" class="validate" value=" ">
+                <label for="title">タイトル</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <!-- materialize のの表示がおかしくなるのでスペース -->
+                <textarea id="description" class="materialize-textarea validate"> </textarea>
+                <label for="description">説明文</label>
+            </div>
+        </div>
+    </div>
+    <div class="col s12">
+        <div class="row">
+            <h4>記事内容</h4>
+            <div class="divider"></div>
+        </div>
+        <div class="row">
+            <div class="col s12">
+                <div class="card-panel" id="parts_list">
+                    <div class="row parts-header">
+                        <h5>これはヘッダーです</h5>
+                        <div class="divider"></div>
+                    </div>
+
+                    <div class="row parts-text">
+                        <p>これはテキスト1</p>
+                    </div>
+
+                    <div class="row parts-text">
+                        <p>これはテキスト2</p>
+                    </div>
+
+                    <div class="row parts-text">
+                        <p>これはテキスト3</p>
+                    </div>
+
+                    <div class="row parts-reference">
+                        <div class="card-panel blue-grey lighten-5">
+                            <p><a href="">参照記事タイトル</a></p>
+                            <p>参照記事説明</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12">
+                <ul class="tabs" id="add_parts_tabs">
+                    <li class="tab col s3"><a class="active" href="#tab_heading">見出し</a></li>
+                    <li class="tab col s3"><a href="#tab_main_text">本文</a></li>
+                    <li class="tab col s3"><a href="#tab_reference_article">関連記事</a></li>
+                </ul>
+            </div>
+            <div id="tab_heading" class="col s12">
+                <div class="card-panel">
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input id="heading" type="text" class="validate" value="見出しテキスト">
+                            <label for="heading">見出しを入力</label>
+                        </div>
+                        <a class="waves-effect waves-light btn" id="heading_add">
+                            <i class="material-icons right">save</i>保存する
+                        </a>
+                        <a class="waves-effect waves-light btn red lighten-1" id="heading_reset">
+                            <i class="material-icons right">delete</i>キャンセル
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div id="tab_main_text" class="col s12">
+                <div class="card-panel">
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <textarea id="main_text" class="materialize-textarea validate">あああ</textarea>
+                            <label for="main_text">本文を入力</label>
+                        </div>
+                        <a class="waves-effect waves-light btn" id="main_text_add">
+                            <i class="material-icons right">save</i>保存する
+                        </a>
+                        <a class="waves-effect waves-light btn red lighten-1" id="main_text_reset">
+                            <i class="material-icons right">delete</i>キャンセル
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div id="tab_reference_article" class="col s12">
+                <div class="card-panel">
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <select id="reference_article">
+                                <option value="" disabled selected>関連記事を選択</option>
+                                <option value="1">(ID: 1) おいしい麦茶の入れ方</option>
+                                <option value="2">(ID: 2) ちょっとマニアックなEjectコマンドの使い方</option>
+                                <option value="3">(ID: 3) 毒を食らわば皿まで</option>
+                                <option value="4">(ID: 4) たのしい人生</option>
+                            </select>
+                            <label for="reference_article">関連記事</label>
+                        </div>
+                        <a class="waves-effect waves-light btn" id="reference_article_add">
+                            <i class="material-icons right">save</i>保存する
+                        </a>
+                        <a class="waves-effect waves-light btn red lighten-1" id="reference_article_reset">
+                            <i class="material-icons right">delete</i>キャンセル
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="hidden-editor" style="display: none;">
+    <button class="waves-effect waves-light btn-small" id="up">
+        <i class="material-icons right">arrow_upward</i>上へ
+    </button>
+    <button class="waves-effect waves-light btn-small" id="down">
+        <i class="material-icons right">arrow_downward</i>下へ
+    </button>
+    <button class="waves-effect waves-light btn-small red lighten-1" id="delete">
+        <i class="material-icons right">delete_forever</i>削除
+    </button>
+</div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

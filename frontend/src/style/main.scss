@@ -1,0 +1,8 @@
+body {
+    background-color: #f5f5f5;
+}
+.parts-header:hover,
+.parts-reference:hover,
+.parts-text:hover {
+    box-shadow: 0 0 10px 10px rgba(70, 70, 70, 0.29);
+}
