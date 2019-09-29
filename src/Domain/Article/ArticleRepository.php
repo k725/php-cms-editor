@@ -19,4 +19,6 @@ interface ArticleRepository
     public function deleteArticleParts(int $articleId, int $partsId);
 
     public function updateArticleSummary(int $articleId, string $title, string $description);
+
+    public function updateArticlePartsOrder(int $articleId, int $partsId, int $old, int $new);
 }

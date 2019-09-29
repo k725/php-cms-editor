@@ -18,14 +18,14 @@ class EditArticleAction extends ArticleAction
         switch ($data->mode)
         {
             case "add":
-                $r = $this->articleRepository->addArticleParts($articleId, $data->type, $data->data);
+                $r = $this->articleRepository->addArticleParts($articleId, $data->type, (string)$data->data);
                 return $this->respondWithData([
                     'id' => $r,
                 ]);
 
             case "update":
-                // order
-                break;
+                $this->articleRepository->updateArticlePartsOrder($articleId, (int)$data->partsId, (int)$data->old, (int)$data->new);
+                return $this->respondWithData();
 
             case "delete":
                 $this->articleRepository->deleteArticleParts($articleId, $data->id);
@@ -35,8 +35,6 @@ class EditArticleAction extends ArticleAction
                 $this->articleRepository->updateArticleSummary($articleId, $data->title, $data->description);
                 return $this->respondWithData();
         }
-
-        $users = $this->articleRepository->findArticleDetailOfId($articleId);
-        return $this->respondWithData($users);
+        return $this->respondWithData([]);
     }
 }

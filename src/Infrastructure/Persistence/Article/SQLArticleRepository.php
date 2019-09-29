@@ -178,21 +178,29 @@ class SQLArticleRepository implements ArticleRepository
         return [];
     }
 
-    public function updateArticlePartsOrder(int $articleId, int $partsId, int $order)
+    public function updateArticlePartsOrder(int $articleId, int $partsId, int $old, int $new)
     {
         try {
             $stmt = $this->pdo->prepare("
-                INSERT INTO
-                    article_parts (id, article_id, article_order, updated_at)
-                VALUES
-                    (:id, :articleId, :articleOrder, CURRENT_TIMESTAMP)
-                ON DUPLICATE KEY UPDATE
-                    article_order = VALUES(article_order),
-                    updated_at = VALUES(updated_at);
+                UPDATE article_parts 
+                SET article_order = 
+                  CASE
+                    WHEN article_order = :old THEN :newN
+                    WHEN article_order = :new THEN :oldN
+                  END 
+                WHERE article_order IN (:old, :new) AND 
+                      article_id = :articleId;
+            
+                UPDATE article_parts
+                SET article_order = - article_order
+                WHERE article_order IN (:oldN, :newN) AND 
+                      article_id = :articleId;
             ");
-            $stmt->bindValue(':id', $partsId, PDO::PARAM_INT);
             $stmt->bindValue(':articleId', $articleId, PDO::PARAM_INT);
-            $stmt->bindValue(':articleOrder', $order, PDO::PARAM_INT);
+            $stmt->bindValue(':old', $old, PDO::PARAM_INT);
+            $stmt->bindValue(':oldN', -$old, PDO::PARAM_INT);
+            $stmt->bindValue(':new', $new, PDO::PARAM_INT);
+            $stmt->bindValue(':newN', -$new, PDO::PARAM_INT);
             $stmt->execute();
         } catch (PDOException $e) {
             $this->logger->error('Failed fetch articles.', [
@@ -220,7 +228,7 @@ class SQLArticleRepository implements ArticleRepository
                                 FROM
                                     article_parts
                                 WHERE
-                                    article_parts.article_id = 1
+                                    article_parts.article_id = :articleId
                             ) AS TMP
                         ),
                         (
@@ -255,27 +263,15 @@ class SQLArticleRepository implements ArticleRepository
     public function updateArticleSummary(int $articleId, string $title, string $description)
     {
         try {
-            // @todo ↓のクエリだと開発環境が zend_mm_heap corrupted で落ちる…
-//            $stmt = $this->pdo->prepare('
-//                UPDATE
-//                    article
-//                SET
-//                    title = :articleTitle,
-//                    description = :articleDesc,
-//                    updated_at = CURRENT_TIMESTAMP
-//                WHERE
-//                    id = :articleId;
-//            ');
             $stmt = $this->pdo->prepare('
-                INSERT INTO
-                    article (id, title, description, updated_at)
-                VALUES
-                    (:articleId, :articleTitle, :articleDesc, CURRENT_TIMESTAMP)
-                ON DUPLICATE KEY UPDATE
-                    id = VALUES(id),
-                    title = VALUES(title),
-                    description = VALUES(description),
-                    updated_at = VALUES(updated_at);
+                UPDATE
+                    article
+                SET
+                    title = :articleTitle,
+                    description = :articleDesc,
+                    updated_at = CURRENT_TIMESTAMP
+                WHERE
+                    id = :articleId;
             ');
             $stmt->bindValue(':articleTitle', $title, PDO::PARAM_STR);
             $stmt->bindValue(':articleDesc', $description, PDO::PARAM_STR);
@@ -293,6 +289,24 @@ class SQLArticleRepository implements ArticleRepository
     {
         try {
             $stmt = $this->pdo->prepare('
+                UPDATE
+                    article_parts
+                SET
+                    article_order = article_order - 1
+                WHERE
+                    article_order > (
+                        SELECT
+                            article_order
+                        FROM (
+                            SELECT
+                                article_order
+                            FROM
+                                article_parts
+                            WHERE
+                                id = :partsId
+                        ) AS TMP
+                    );
+
                 DELETE
                 FROM
                     article_parts

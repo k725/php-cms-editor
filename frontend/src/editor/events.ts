@@ -1,4 +1,4 @@
-import {deletePartsAsync} from "../api/parts";
+import {deletePartsAsync, updatePartsOrderAsync} from "../api/parts";
 import {getArticleID} from "../util/getArticleID";
 
 const getPartsNode = (e) => {
@@ -18,19 +18,27 @@ export const setupPartsEditEvents = (elem) => {
         elem.appendChild(editor);
 
         // Up button
-        document.getElementById('up').addEventListener('click', (e) => {
+        document.getElementById('up').addEventListener('click', async (e) => {
             const partsNode = getPartsNode(e);
+            const articleId = getArticleID();
+            const partsId = parseInt(partsNode.dataset.id, 10);
 
-            console.log("before", getCurrentOrder(partsNode));
+            const order = getCurrentOrder(partsNode);
+            await updatePartsOrderAsync(articleId, partsId, order, order - 1);
 
             partsNode.previousElementSibling.before(partsNode);
 
-            console.log("after", getCurrentOrder(partsNode));
         }, false);
 
         // Down button
-        document.getElementById('down').addEventListener('click', (e) => {
+        document.getElementById('down').addEventListener('click', async (e) => {
             const partsNode = getPartsNode(e);
+            const articleId = getArticleID();
+            const partsId = parseInt(partsNode.dataset.id, 10);
+
+            const order = getCurrentOrder(partsNode);
+            await updatePartsOrderAsync(articleId, partsId, order, order + 1);
+
             partsNode.nextElementSibling.after(partsNode);
         }, false);
 

@@ -6,6 +6,7 @@ import {createReferenceParts} from "../../parts/reference";
 import * as M from "materialize-css";
 import {addPartsAsync} from "../../api/parts";
 import {getArticleID} from "../../util/getArticleID";
+import {fetchAllArticles, fetchArticleAsync} from "../../api/fetchArticle";
 
 const setupHeadingEvents = () => {
     // Add event
@@ -66,19 +67,21 @@ const setupReferenceEvents = () => {
             return;
         }
 
-        const titleValue = 'a';
-        const descValue = 'i';
-        const linkValue = 'u';
-        const partsReference = createReferenceParts(titleValue, descValue, linkValue);
-        addParts(partsReference);
-        setupPartsEditEvents(partsReference);
+        const articleId = getArticleID();
+        const article = await fetchArticleAsync(selectArticle);
+
+        const titleValue = article.data.title;
+        const descValue = article.data.description;
+        const linkValue = `/articles/${article.data.id}`;
 
         const data = {
             type: "reference",
             data: selectArticle,
         };
-        const articleId = getArticleID();
-        await addPartsAsync(articleId, data);
+        const result = await addPartsAsync(articleId, data);
+        const partsReference = createReferenceParts(result.data.id, titleValue, descValue, linkValue);
+        addParts(partsReference);
+        setupPartsEditEvents(partsReference);
     }, false);
 
     // Reset event

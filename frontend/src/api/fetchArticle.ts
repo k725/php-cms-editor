@@ -10,10 +10,16 @@ export const fetchArticleAsync = async (id: number) => {
     }
 };
 
+let articles = [];
 export const fetchAllArticles = async () => {
     try {
+        if (articles.length != 0) {
+            return articles;
+        }
         const result = await fetch(`/api/articles`);
-        return await result.json();
+        const json = await result.json();
+        articles = json;
+        return json;
     } catch (e) {
         console.log(e);
         return [];

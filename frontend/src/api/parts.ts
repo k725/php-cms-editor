@@ -33,3 +33,23 @@ export const deletePartsAsync = async (id: number, partsId: number) => {
     }
 };
 
+export const updatePartsOrderAsync = async (id: number, partsId: number, oldIndex: number, newIndex: number) => {
+    try {
+        const data = {
+            mode: "update",
+            partsId: partsId,
+            old: oldIndex,
+            new: newIndex,
+        };
+        const result = await fetch(`/api/articles/${id}`, {
+            method: "post",
+            body: JSON.stringify(data),
+        });
+        return await result.json();
+    } catch (e) {
+        console.log(e);
+        return {
+
+        };
+    }
+};

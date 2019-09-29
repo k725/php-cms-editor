@@ -15,10 +15,10 @@ export const setupSummaryEvents = () => {
         lastTitle = title;
         lastDescription = description;
         await upadteArticleSummaryAsync(articleId, title, description);
-    }, 1000);
+    }, 1500);
 
-    // document.getElementById('title').addEventListener('keydown', updateSummary, false);
+    document.getElementById('title').addEventListener('keydown', updateSummary, false);
     document.getElementById('title').addEventListener('focusout', updateSummary, false);
-    // document.getElementById('description').addEventListener('keydown', updateSummary, false);
+    document.getElementById('description').addEventListener('keydown', updateSummary, false);
     document.getElementById('description').addEventListener('focusout', updateSummary, false);
 };
