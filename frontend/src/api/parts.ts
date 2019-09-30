@@ -1,55 +1,70 @@
-export const addPartsAsync = async (id: number, data: object) => {
-    try {
-        data.mode = "add";
-        const result = await fetch(`/api/articles/${id}`, {
-            method: "post",
-            body: JSON.stringify(data),
-        });
-        return await result.json();
-    } catch (e) {
-        console.log(e);
-        return {
+import {FetchWrap, IEmptyResponse} from "./fetchWrap";
 
-        };
+export enum PartsType {
+    Heading = "heading",
+    Text = "text",
+    Reference = "reference",
+}
+
+interface IAddPartsResponse {
+    statusCode: number;
+    data: {
+        id: number;
+    };
+}
+
+interface IAddPartsRequest {
+    mode: "add",
+    type: PartsType;
+    data: string|number;
+}
+
+interface IUpdateOrderPartsRequest {
+    mode: "update",
+    partsId: number; // @todo change name!!!
+    old: number,
+    new: number,
+}
+
+interface IDeletePartsRequest {
+    mode: "delete",
+    id: number;
+}
+
+export class Parts {
+    /**
+     * Add article parts the article
+     * @param articleId
+     * @param data
+     */
+    public static async addAsync(
+        articleId: number,
+        data: IAddPartsRequest
+    ): Promise<Partial<IAddPartsResponse>> {
+        return await FetchWrap.postJsonAsync<IAddPartsRequest, IAddPartsResponse>(`/api/articles/${articleId}`, data);
     }
-};
 
-export const deletePartsAsync = async (id: number, partsId: number) => {
-    try {
-        const data = {
-            mode: "delete",
-            id: partsId,
-        };
-        const result = await fetch(`/api/articles/${id}`, {
-            method: "post",
-            body: JSON.stringify(data),
-        });
-        return await result.json();
-    } catch (e) {
-        console.log(e);
-        return {
-
-        };
+    /**
+     * Update the order of article parts
+     * @param articleId
+     * @param data
+     */
+    public static async updateOrderAsync(
+        articleId: number,
+        data: IUpdateOrderPartsRequest
+    ): Promise<Partial<IEmptyResponse>> {
+        return await FetchWrap.postJsonAsync<IUpdateOrderPartsRequest, IEmptyResponse>(`/api/articles/${articleId}`, data);
     }
-};
 
-export const updatePartsOrderAsync = async (id: number, partsId: number, oldIndex: number, newIndex: number) => {
-    try {
-        const data = {
-            mode: "update",
-            partsId: partsId,
-            old: oldIndex,
-            new: newIndex,
-        };
-        const result = await fetch(`/api/articles/${id}`, {
-            method: "post",
-            body: JSON.stringify(data),
-        });
-        return await result.json();
-    } catch (e) {
-        console.log(e);
-        return {
-
-        };
+    /**
+     * Delete article parts the article
+     * @param articleId
+     * @param data
+     */
+    public static async deleteAsync(
+        articleId: number,
+        data: IDeletePartsRequest
+    ): Promise<Partial<IEmptyResponse>> {
+        return await FetchWrap.postJsonAsync<IDeletePartsRequest, IEmptyResponse>(`/api/articles/${articleId}`, data);
     }
-};
+}

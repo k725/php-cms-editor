@@ -1,20 +1,24 @@
 import {throttle} from "lodash";
-import {upadteArticleSummaryAsync} from "../../api/summary";
 import {getArticleID} from "../../util/getArticleID";
+import {Article} from "../../api/article";
 
 export const setupSummaryEvents = () => {
     const articleId = getArticleID();
     let lastTitle = '';
     let lastDescription = '';
     const updateSummary = throttle(async () => {
-        const title = document.getElementById('title').value;
-        const description = document.getElementById('description').value;
+        const title = (<HTMLInputElement>document.getElementById('title')).value;
+        const description = (<HTMLInputElement>document.getElementById('description')).value;
         if (lastTitle === title && lastDescription == description) {
             return;
         }
         lastTitle = title;
         lastDescription = description;
-        await upadteArticleSummaryAsync(articleId, title, description);
+        await Article.updateSummary(articleId, {
+            title: title,
+            description: description,
+            mode: "summary",
+        });
     }, 1500);
 
     document.getElementById('title').addEventListener('keydown', updateSummary, false);

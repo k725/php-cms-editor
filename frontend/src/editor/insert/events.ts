@@ -1,92 +1,100 @@
+import * as M from "materialize-css";
 import {createHeadingParts} from "../../parts/heading";
 import {addParts} from "../../parts/add";
 import {setupPartsEditEvents} from "../events";
 import {createTextParts} from "../../parts/text";
 import {createReferenceParts} from "../../parts/reference";
-import * as M from "materialize-css";
-import {addPartsAsync} from "../../api/parts";
+import {Parts, PartsType} from "../../api/parts";
 import {getArticleID} from "../../util/getArticleID";
-import {fetchAllArticles, fetchArticleAsync} from "../../api/fetchArticle";
+import {Article} from "../../api/article";
 
 const setupHeadingEvents = () => {
     // Add event
     document.getElementById('heading_add').addEventListener('click', async () => {
-        const headingValue = document.getElementById('heading').value;
+        const headingValue = (<HTMLInputElement>document.getElementById('heading')).value;
         if (headingValue.trim() === "") {
             return;
         }
 
-        const data = {
-            type: "heading",
-            data: headingValue,
-        };
         const articleId = getArticleID();
-        const result = await addPartsAsync(articleId, data);
+        const result = await Parts.addAsync(articleId, {
+            mode: "add",
+            type: PartsType.Heading,
+            data: headingValue,
+        });
+
         const partsHeader = createHeadingParts(result.data.id, headingValue);
         addParts(partsHeader);
         setupPartsEditEvents(partsHeader);
+        (<HTMLInputElement>document.getElementById('heading')).value = '';
     }, false);
 
     // Reset event
     document.getElementById('heading_reset').addEventListener('click', () => {
-        document.getElementById('heading').value = '';
+        (<HTMLInputElement>document.getElementById('heading')).value = '';
     }, false);
 };
 
 const setupTextEvents = () => {
     // Add event
     document.getElementById('main_text_add').addEventListener('click', async () => {
-        const textValue = document.getElementById('main_text').value;
+        const textValue = (<HTMLInputElement>document.getElementById('main_text')).value;
         if (textValue.trim() === "") {
             return;
         }
 
-        const data = {
-            type: "text",
-            data: textValue,
-        };
         const articleId = getArticleID();
-        const result = await addPartsAsync(articleId, data);
+        const result = await Parts.addAsync(articleId, {
+            mode: "add",
+            type: PartsType.Text,
+            data: textValue,
+        });
+
         const partsText = createTextParts(result.data.id, textValue);
         addParts(partsText);
         setupPartsEditEvents(partsText);
+        (<HTMLInputElement>document.getElementById('main_text')).value = '';
     }, false);
 
     // Reset event
     document.getElementById('main_text_reset').addEventListener('click', () => {
-        document.getElementById('main_text').value = '';
+        (<HTMLInputElement>document.getElementById('main_text')).value = '';
     }, false);
 };
 
 const setupReferenceEvents = () => {
     // Add event
     document.getElementById('reference_article_add').addEventListener('click', async () => {
-        const selectArticle = document.getElementById('reference_article').selectedIndex;
+        const selectArticle = (<HTMLSelectElement>document.getElementById('reference_article')).selectedIndex;
         if (selectArticle === -1) {
             console.log('Not selected!');
             return;
         }
 
         const articleId = getArticleID();
-        const article = await fetchArticleAsync(selectArticle);
+        const article = await Article.fetchAsync(selectArticle);
 
         const titleValue = article.data.title;
         const descValue = article.data.description;
         const linkValue = `/articles/${article.data.id}`;
 
-        const data = {
-            type: "reference",
+        const result = await Parts.addAsync(articleId, {
+            mode: "add",
+            type: PartsType.Reference,
             data: selectArticle,
-        };
-        const result = await addPartsAsync(articleId, data);
+        });
+
         const partsReference = createReferenceParts(result.data.id, titleValue, descValue, linkValue);
         addParts(partsReference);
         setupPartsEditEvents(partsReference);
+
+        (<HTMLSelectElement>document.getElementById('reference_article')).selectedIndex = -1;
+        M.FormSelect.init(document.getElementById('reference_article'), {});
     }, false);
 
     // Reset event
     document.getElementById('reference_article_reset').addEventListener('click', () => {
-        document.getElementById('reference_article').selectedIndex = -1;
+        (<HTMLSelectElement>document.getElementById('reference_article')).selectedIndex = -1;
         M.FormSelect.init(document.getElementById('reference_article'), {});
     }, false);
 };
