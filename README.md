@@ -31,8 +31,8 @@ $ cd ..
 Setup server
 
 ```bash
-$ cp src/settings_sample.php src/settings.php
-$ vim src/settings.php
+$ cp app/settings_sample.php app/settings.php
+$ vim app/settings.php
 $ composer install
 $ composer run migrate
 $ composer run start
