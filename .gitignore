@@ -93,4 +93,8 @@ modules.xml
 /vendor/
 /logs/*
 !/logs/README.md
-/var/cache/*
+/cache/Twig/*
+!/cache/Twig/.gitkeep
+/public/static/*
+!/public/static/.gitkeep
+/app/settings.php

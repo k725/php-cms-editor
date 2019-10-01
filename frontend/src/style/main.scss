@@ -1,0 +1,14 @@
+body {
+    background-color: #fbfbfb;
+}
+.parts-header:hover,
+.parts-reference:hover,
+.parts-text:hover {
+    box-shadow: 0 0 5px 5px rgba(70, 70, 70, 0.29);
+}
+
+#tab_heading .card-panel,
+#tab_main_text .card-panel,
+#tab_reference_article .card-panel {
+    margin-top: 0;
+}

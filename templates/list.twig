@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <title>List</title>
+</head>
+<body>
+
+<ul>
+    {% for a in articles %}
+        <li>
+            {{ a.title }}
+            <a href="/articles/{{ a.id }}">閲覧</a>,
+            <a href="/articles/{{ a.id }}/edit">編集</a>
+        </li>
+    {% else %}
+        <li><em>Articles not found</em></li>
+    {% endfor %}
+</ul>
+
+</body>
+</html>
