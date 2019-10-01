@@ -23,7 +23,7 @@ const setupHeadingEvents = () => {
             data: headingValue,
         });
 
-        const partsHeader = createHeadingParts(result.data.id, headingValue);
+        const partsHeader = createHeadingParts(headingValue);
         addParts(partsHeader);
         setupPartsEditEvents(partsHeader);
         (<HTMLInputElement>document.getElementById('heading')).value = '';
@@ -50,7 +50,7 @@ const setupTextEvents = () => {
             data: textValue,
         });
 
-        const partsText = createTextParts(result.data.id, textValue);
+        const partsText = createTextParts(textValue);
         addParts(partsText);
         setupPartsEditEvents(partsText);
         (<HTMLInputElement>document.getElementById('main_text')).value = '';
@@ -84,7 +84,7 @@ const setupReferenceEvents = () => {
             data: selectArticle,
         });
 
-        const partsReference = createReferenceParts(result.data.id, titleValue, descValue, linkValue);
+        const partsReference = createReferenceParts(titleValue, descValue, linkValue);
         addParts(partsReference);
         setupPartsEditEvents(partsReference);
 

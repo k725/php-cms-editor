@@ -2,6 +2,10 @@ export interface IEmptyResponse {
     statusCode?: number;
 }
 
+export interface IBooleanResponse extends IEmptyResponse {
+    data?: boolean;
+}
+
 export class FetchWrap {
     /**
      * @param url Access URL

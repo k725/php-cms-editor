@@ -20,7 +20,7 @@ export const buildArticle = async () => {
                 if (typeof data.data !== "string") {
                     return;
                 }
-                const headElem = createHeadingParts(data.partsId, data.data);
+                const headElem = createHeadingParts(data.data);
                 addParts(headElem);
                 setupPartsEditEvents(headElem);
                 break;
@@ -28,7 +28,7 @@ export const buildArticle = async () => {
                 if (typeof data.data !== "string") {
                     return;
                 }
-                const textElem = createTextParts(data.partsId, data.data);
+                const textElem = createTextParts(data.data);
                 addParts(textElem);
                 setupPartsEditEvents(textElem);
                 break;
@@ -37,7 +37,6 @@ export const buildArticle = async () => {
                     return;
                 }
                 const refElem = createReferenceParts(
-                    data.partsId,
                     data.data.title,
                     data.data.description,
                     `/articles/${data.data.id}`,

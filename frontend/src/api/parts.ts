@@ -1,16 +1,9 @@
-import {FetchWrap, IEmptyResponse} from "./fetchWrap";
+import {FetchWrap, IBooleanResponse} from "./fetchWrap";
 
 export enum PartsType {
     Heading = "heading",
     Text = "text",
     Reference = "reference",
-}
-
-interface IAddPartsResponse {
-    statusCode: number;
-    data: {
-        id: number;
-    };
 }
 
 interface IAddPartsRequest {
@@ -21,14 +14,13 @@ interface IAddPartsRequest {
 
 interface IUpdateOrderPartsRequest {
     mode: "update",
-    partsId: number; // @todo change name!!!
-    old: number,
-    new: number,
+    oldOrder: number,
+    newOrder: number,
 }
 
 interface IDeletePartsRequest {
     mode: "delete",
-    id: number;
+    order: number;
 }
 
 export class Parts {
@@ -40,8 +32,8 @@ export class Parts {
     public static async addAsync(
         articleId: number,
         data: IAddPartsRequest
-    ): Promise<Partial<IAddPartsResponse>> {
-        return await FetchWrap.postJsonAsync<IAddPartsRequest, IAddPartsResponse>(`/api/articles/${articleId}`, data);
+    ): Promise<Partial<IBooleanResponse>> {
+        return await FetchWrap.postJsonAsync<IAddPartsRequest, IBooleanResponse>(`/api/articles/${articleId}`, data);
     }
 
     /**
@@ -52,8 +44,8 @@ export class Parts {
     public static async updateOrderAsync(
         articleId: number,
         data: IUpdateOrderPartsRequest
-    ): Promise<Partial<IEmptyResponse>> {
-        return await FetchWrap.postJsonAsync<IUpdateOrderPartsRequest, IEmptyResponse>(`/api/articles/${articleId}`, data);
+    ): Promise<Partial<IBooleanResponse>> {
+        return await FetchWrap.postJsonAsync<IUpdateOrderPartsRequest, IBooleanResponse>(`/api/articles/${articleId}`, data);
     }
 
     /**
@@ -64,7 +56,7 @@ export class Parts {
     public static async deleteAsync(
         articleId: number,
         data: IDeletePartsRequest
-    ): Promise<Partial<IEmptyResponse>> {
-        return await FetchWrap.postJsonAsync<IDeletePartsRequest, IEmptyResponse>(`/api/articles/${articleId}`, data);
+    ): Promise<Partial<IBooleanResponse>> {
+        return await FetchWrap.postJsonAsync<IDeletePartsRequest, IBooleanResponse>(`/api/articles/${articleId}`, data);
     }
 }

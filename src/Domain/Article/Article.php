@@ -121,32 +121,22 @@ class Article implements JsonSerializable
         return $this->refs;
     }
 
-    private function findReferenceArticleOfId(int $id): array
-    {
-        foreach ($this->refs as $r) {
-            if ((int)$r['id'] === $id) {
-                $r['id'] = (int)$r['id'];
-                return $r;
-            }
-        }
-        return [];
-    }
-
     /**
      * @return array
      */
     public function jsonSerialize()
     {
+        $refArticles = [];
+        foreach ($this->refs as $r) {
+            $refArticles[(string)$r['id']] = $r;
+        }
+
         $parts = $this->parts;
         foreach ($parts as $i => $p) {
-            // $parts[$i]['articleOrder'] = (int)$p['article_order'];
-            $parts[$i]['partsId'] = (int)$p['parts_id'];
-            unset($parts[$i]['parts_id']);
-
             if ($p['name'] !== 'reference') {
                 continue;
             }
-            $parts[$i]['data'] = $this->findReferenceArticleOfId((int)$p['data']);
+            $parts[$i]['data'] = $refArticles[(string)$p['data']];
         }
 
         return [

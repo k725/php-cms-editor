@@ -1,10 +1,11 @@
-import {FetchWrap, IEmptyResponse} from "./fetchWrap";
+import {FetchWrap, IBooleanResponse} from "./fetchWrap";
 import {PartsType} from "./parts";
 
 interface IArticleSummary {
     id: number;
     title: string;
-    created_at: string;
+    createdAt: string;
+    updatedAt: string;
 }
 
 interface IArticlesResponse {
@@ -19,7 +20,6 @@ interface IReferenceParts {
 }
 
 interface IArticleParts {
-    partsId: number;
     data: string | IReferenceParts;
     name: PartsType;
 }
@@ -66,7 +66,7 @@ export class Article {
     public static async updateSummary(
         articleId: number,
         data: IUpdateArticleSummaryRequest
-    ): Promise<Partial<IEmptyResponse>> {
-        return await FetchWrap.postJsonAsync<IUpdateArticleSummaryRequest, IEmptyResponse>(`/api/articles/${articleId}`, data);
+    ): Promise<Partial<IBooleanResponse>> {
+        return await FetchWrap.postJsonAsync<IUpdateArticleSummaryRequest, IBooleanResponse>(`/api/articles/${articleId}`, data);
     }
 }

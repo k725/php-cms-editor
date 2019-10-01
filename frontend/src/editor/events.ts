@@ -42,14 +42,12 @@ export const setupPartsEditEvents = (elem) => {
         document.getElementById('up').addEventListener('click', async (e) => {
             const partsNode = getPartsNode(e);
             const articleId = getArticleID();
-            const partsId = parseInt(partsNode.dataset.id, 10);
 
             const order = getCurrentOrder(partsNode);
             await Parts.updateOrderAsync(articleId, {
                 mode: "update",
-                partsId: partsId,
-                old: order,
-                new: order - 1,
+                oldOrder: order,
+                newOrder: order - 1,
             });
 
             partsNode.previousElementSibling.before(partsNode);
@@ -59,14 +57,12 @@ export const setupPartsEditEvents = (elem) => {
         document.getElementById('down').addEventListener('click', async (e) => {
             const partsNode = getPartsNode(e);
             const articleId = getArticleID();
-            const partsId = parseInt(partsNode.dataset.id, 10);
 
             const order = getCurrentOrder(partsNode);
             await Parts.updateOrderAsync(articleId, {
                 mode: "update",
-                partsId: partsId,
-                old: order,
-                new: order + 1,
+                oldOrder: order,
+                newOrder: order + 1,
             });
 
             partsNode.nextElementSibling.after(partsNode);
@@ -77,9 +73,10 @@ export const setupPartsEditEvents = (elem) => {
             const partsNode = getPartsNode(e);
             const articleId = getArticleID();
 
+            const order = getCurrentOrder(partsNode);
             await Parts.deleteAsync(articleId, {
                 mode: "delete",
-                id: parseInt(partsNode.dataset.id, 10),
+                order: order,
             });
 
             partsNode.remove();

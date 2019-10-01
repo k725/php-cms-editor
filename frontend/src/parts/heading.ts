@@ -6,10 +6,9 @@
  *   <div class="divider"></div>
  * </div>
  *
- * @param id
  * @param headingValue
  */
-export const createHeadingParts = (id: number, headingValue: string): HTMLDivElement => {
+export const createHeadingParts = (headingValue: string): HTMLDivElement => {
     const divider = document.createElement('div');
     divider.classList.add('divider');
 
@@ -20,7 +19,6 @@ export const createHeadingParts = (id: number, headingValue: string): HTMLDivEle
     partsHeader.classList.add('row', 'parts-header');
     partsHeader.appendChild(text);
     partsHeader.appendChild(divider);
-    partsHeader.dataset.id = id.toString();
 
     return partsHeader;
 };

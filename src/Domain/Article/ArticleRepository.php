@@ -10,15 +10,41 @@ interface ArticleRepository
      */
     public function findAll(): array;
 
-    public function findArticleSummaryOfId(int $id): array;
+    /**
+     * @param int $articleId
+     * @return Article
+     * @throws ArticleNotFoundException
+     */
+    public function findArticleDetailOfId(int $articleId): Article;
 
-    public function findArticleDetailOfId(int $id): Article;
+    /**
+     * @param int $articleId
+     * @param string $articleType
+     * @param string $data
+     * @return bool
+     */
+    public function addArticleParts(int $articleId, string $articleType, string $data): bool;
 
-    public function addArticleParts(int $articleId, string $articleType, string $data);
+    /**
+     * @param int $articleId
+     * @param int $articleOrder
+     * @return bool
+     */
+    public function deleteArticleParts(int $articleId, int $articleOrder): bool;
 
-    public function deleteArticleParts(int $articleId, int $partsId);
+    /**
+     * @param int $articleId
+     * @param string $title
+     * @param string $description
+     * @return bool
+     */
+    public function updateArticleSummary(int $articleId, string $title, string $description): bool;
 
-    public function updateArticleSummary(int $articleId, string $title, string $description);
-
-    public function updateArticlePartsOrder(int $articleId, int $partsId, int $old, int $new);
+    /**
+     * @param int $articleId
+     * @param int $old
+     * @param int $new
+     * @return bool
+     */
+    public function updateArticlePartsOrder(int $articleId, int $old, int $new): bool;
 }
